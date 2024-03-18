@@ -45,13 +45,8 @@ def get_blog(request, pk):
 def create_blog(request):
     serializer = BlogSerializer(data=request.data)
     if serializer.is_valid():
-        # Get the category IDs from the request data
         category_ids = request.data.get('category', [])
-
-        # Retrieve the category objects based on the IDs
         categories = Category.objects.filter(pk__in=category_ids)
-
-        # Save the blog object with the categories assigned
         blog = serializer.save(created_by_id=request.data.get('created_by'), categories=categories)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
